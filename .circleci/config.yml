@@ -1,0 +1,137 @@
+version: 2
+
+aliases:
+  - &defaults
+    docker:
+      - image: circleci/node:12
+  - &aws-qa
+    setupaws:
+      apisecret: $AWS_DEV_SECRET_ACCESS_KEY
+  - &aws-prod
+    setupaws:
+      apikey: defaultApiKey
+      apisecret: $AWS_PROD_SECRET_ACCESS_KEY
+  - &stage-filters
+    filters:
+      branches:
+        only:
+          - /release-.*/
+  - &prod-filters
+    filters:
+      branches:
+        only: master
+
+commands:
+  setupaws:
+    description: "Install and configure awscli"
+    parameters:
+      apikey:
+        type: string
+        default: defaultApiKey
+      apisecret:
+        type: string
+    steps:
+      - run: sudo apt install python-pip python-dev
+      - run: sudo pip install awscli
+      - run: aws configure set aws_access_key_id << parameters.apikey >>
+      - run: aws configure set aws_secret_access_key << parameters.apisecret >>
+      - run: aws configure set default.region us-east-1
+
+  deploytoaws:
+    description: "Upload to S3 and cloudfront invalidation"
+    parameters:
+      bucket:
+        type: string
+      distribution:
+        type: string
+    steps:
+      - run: aws s3 sync --delete build/ s3://<< parameters.bucket >> --exclude "*.map"
+      - run: aws configure set preview.cloudfront true
+      - run: aws cloudfront create-invalidation --distribution-id << parameters.distribution >> --paths "/*"
+  notifyrollbar:
+    description: "Send deploy notification to rollbar"
+    parameters:
+      token:
+        type: string
+      environment:
+        type: string
+    steps:
+      - run:
+          name: Deployment notification to Rollbar
+          command: |
+            curl https://api.rollbar.com/api/1/deploy/ \
+            -F access_token=<< parameters.token >> \
+            -F environment=<< parameters.environment >> \
+            -F revision=$CIRCLE_SHA1 \
+            -F local_username=$CIRCLE_USERNAME
+
+  uploadsourcemaps:
+    description: "Upload source maps to rollbar"
+    parameters:
+      token:
+        type: string
+      baseurl:
+        type: string
+      environment:
+        type: string
+    steps:
+      - run:
+          name: Upload source map to Rollbar
+          command: |
+            for filepath in build/static/js/*; do
+              case $filepath in *.map) {
+                name=${filepath//build\//}
+                name_without_map=${name//.map/""}
+                source_map=@${filepath//.\//""}
+                curl https://api.rollbar.com/api/1/sourcemap/ \
+                -F access_token=<< parameters.token >> \
+                -F minified_url=<< parameters.baseurl >>/$name_without_map \
+                -F version=<< parameters.environment >> \
+                -F source_map=$source_map
+              } ;;
+              esac
+            done
+jobs:
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: yarn install
+  release:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: yarn install
+      - run: yarn run multi-semantic-release
+  build-qa-somecustomer:
+    <<: *defaults
+    steps:
+      - checkout
+      - *aws-qa
+      - run: yarn install
+      - run: CI=false REACT_APP_ROLLBAR_TOKEN=$REACT_APP_ROLLBAR_QA_TOKEN yarn build someCustomer qa
+  build-prod-somecustomer:
+    <<: *defaults
+    steps:
+      - checkout
+      - *aws-prod
+      - run: yarn install
+      - run: CI=false REACT_APP_ROLLBAR_TOKEN=$REACT_APP_ROLLBAR_PROD_TOKEN yarn build someCustomer prod
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - test
+      - approval-somecustomer:
+          <<: *stage-filters
+          type: approval
+          requires:
+            - test
+      - build-qa-somecustomer:
+          <<: *stage-filters
+          requires:
+            - approval-somecustomer
+      - build-prod-somecustomer:
+          <<: *prod-filters
+          requires:
+            - approval-somecustomer

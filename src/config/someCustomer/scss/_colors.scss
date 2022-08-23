@@ -1,0 +1,28 @@
+$black: #333;
+$white: #FFF;
+$gray: rgba(0, 0, 0, 0.54);
+$disabled-gray: #D5D3D3;
+$divider-base: rgba(236, 219, 219, 0.15);
+$input-primary: #00D564;
+$loading-base: #00AF52;
+$error: #F44336;
+$primary-button: #00D564;
+$primary-button-hover: #00AF52;
+$primary-text-button-hover: #D0F7E2;
+$topbar-background: #00D564;
+
+// sass-lint:disable no-misspelled-properties
+// sass-lint:disable property-sort-order
+:export {
+  black: $black;
+  white: $white;
+  gray: $gray;
+  disabledGray: $disabled-gray;
+  dividerBase: $divider-base;
+  inputPrimary: $input-primary;
+  loadingBase: $loading-base;
+  error: $error;
+  primaryButton: $primary-button;
+  primaryButtonHover: $primary-button-hover;
+  primaryTextButtonHover: $primary-text-button-hover;
+}

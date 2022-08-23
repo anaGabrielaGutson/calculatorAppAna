@@ -1,0 +1,29 @@
+// sass-lint:disable no-url-domains
+// sass-lint:disable no-url-protocols
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700,900');
+
+html,
+body {
+  font-family: 'Poppins', sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+#root {
+  height: 100%;
+}
+
+// sass-lint:disable no-vendor-prefixes
+button {
+  font: inherit;
+
+  &::-moz-focus-inner {
+    //Prevent firefox to add a dotted border when pressing a button
+    border: 0;
+  }
+}

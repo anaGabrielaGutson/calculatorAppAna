@@ -1,0 +1,9 @@
+@function getIn($map, $keys...) {
+  @each $key in $keys {
+    $map: map-get($map, $key);
+    @if not $map {
+      @error 'Couldn\'t found key: #{$key}';
+    }
+  }
+  @return $map;
+}

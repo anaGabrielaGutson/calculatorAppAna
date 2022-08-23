@@ -1,0 +1,18 @@
+handlers:
+  create_new_release:
+    active: true
+    assignees:
+      - segulino
+      - glipina
+    labels:
+      - Release
+  mergeable:
+    active: true
+  cleanup_release:
+    active: true
+  is_semantic:
+    active: true
+  notify_and_clean_released:
+    active: true
+  notify_merge_to_release:
+    active: true

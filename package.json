@@ -1,0 +1,69 @@
+{
+  "name": "react-app-bootstrap",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "4.0.2",
+    "@widergy/energy-ui": ">=0.8.0",
+    "@widergy/utilitygo-forms-web": "^0.10.3",
+    "@widergy/web-utils": ">=0.12.0",
+    "apisauce": ">=0.14.1",
+    "connected-react-router": "^6.2.2",
+    "es5-shim": ">=4.5.9",
+    "es6-shim": ">=0.35.3",
+    "es7-shim": ">=6.0.0",
+    "i18next": "^15.1.2",
+    "node-sass": "^4.9.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-ga": ">=2.4.1",
+    "react-redux": "^7.1.0",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "redux": ">=3.6.0",
+    "redux-beacon": "^1.1.0",
+    "redux-form": "^8.1.0",
+    "redux-recompose": "^2.1.5",
+    "redux-thunk": "^2.3.0",
+    "reselect": "^3.0.1",
+    "rollbar": "^2.5.4",
+    "sass-loader": "^7.0.3",
+    "seamless-immutable": "^7.1.4",
+    "url-search-params-polyfill": ">=2.0.1"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "husky": ">=0.14.3",
+    "prettier": "^1.7.4",
+    "prettier-eslint": "^8.2.1",
+    "react-scripts": "3.0.1",
+    "sass-lint": "^1.12.1"
+  },
+  "scripts": {
+    "start": "node scripts/start",
+    "build": "node scripts/build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "sass-lint": "./node_modules/sass-lint/bin/sass-lint.js -v -q",
+    "lint": "./node_modules/eslint/bin/eslint.js src && yarn sass-lint",
+    "lint-fix": "./node_modules/eslint/bin/eslint.js src --fix",
+    "lint-diff": "git diff --name-only --cached --relative --diff-filter=ACM | grep \\.js$ | xargs ./node_modules/eslint/bin/eslint.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint-diff && yarn sass-lint"
+    }
+  }
+}

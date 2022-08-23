@@ -1,0 +1,43 @@
+@import 'scss/variables/_sizes.scss';
+@import 'scss/variables/_mediaQueries.scss';
+@import '_general.scss';
+@import '_colors.scss';
+
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - #{$topbar-heigth});
+  justify-content: flex-start;
+  padding: 40px 20px;
+  width: 100%;
+}
+
+.characters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.characterContainer {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 350px;
+}
+
+%character-someCustomer {
+  border: 1px solid $gray;
+}
+
+.character {
+  @extend %character-#{$customer} !optional;
+  height: 300px;
+
+  @media #{$mobile} {
+    height: 200px;
+  }
+}

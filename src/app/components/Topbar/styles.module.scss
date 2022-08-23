@@ -1,0 +1,19 @@
+@import 'scss/variables/_sizes.scss';
+@import '_colors.scss';
+
+$shadow: 0 0 7px 0 rgba(122, 122, 122, 0.81);
+
+.container {
+  align-items: center;
+  background-color: $topbar-background;
+  box-shadow: $shadow;
+  display: flex;
+  height: $topbar-heigth;
+  justify-content: space-between;
+  padding: 20px;
+  width: 100%;
+}
+
+.logo {
+  height: calc(#{$topbar-heigth} - 40px);
+}

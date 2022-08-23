@@ -1,0 +1,14 @@
+$small-mobile: 'only screen and (max-width : 361px)';
+$mobile: 'only screen and (max-width : 767px)';
+$tablet-mobile: 'only screen and (max-width : 1024px)';
+$tablet: 'only screen and (min-width : 768px) and (max-width : 1024px)';
+$desktop-tablet: 'only screen and (min-width : 768px)';
+$desktop: 'only screen and (min-width : 1025px)';
+$hd-plus: 'only screen and (min-width : 1450px)';
+$full-hd: 'only screen and (min-width : 1920px)';
+
+// sass-lint:disable no-misspelled-properties
+:export {
+  mobileBreakpoint: 767;
+  tabletBreakpoint: 1024;
+}

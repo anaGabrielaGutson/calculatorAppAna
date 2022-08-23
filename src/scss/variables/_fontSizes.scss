@@ -1,0 +1,11 @@
+$small: 12px;
+$medium: 14px;
+$large: 18px;
+
+// sass-lint:disable no-misspelled-properties
+// sass-lint:disable property-sort-order
+:export {
+  small: $small;
+  medium: $medium;
+  large: $large;
+}
