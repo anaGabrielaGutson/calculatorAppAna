@@ -14,6 +14,9 @@ export default {
     },
     DefaultMessages: {
       getQuotesFailure: 'Hubo un error al recuperar los personajes!'
+    },
+    Calculator: {
+      name: 'Casio 22082001'
     }
   }
 };

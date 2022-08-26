@@ -1,16 +1,103 @@
 @import 'scss/variables/_sizes.scss';
 @import '_colors.scss';
 
-.container {
+$calculator-color: #b2e2d4;
+$display-box-color: #6abeb3;
+
+.calculatorContainer {
   align-items: center;
+  background-color: $calculator-color;
+  border-radius: 10%;
   display: flex;
   flex-direction: column;
   height: calc(100% - #{$topbar-heigth});
   justify-content: flex-start;
-  padding: 40px 20px;
-  width: 100%;
+  margin: 20px auto;
+  width: 600px;
 }
 
-.action {
-  margin: 40px;
+.calculatorButton {
+  background-color: $calculator-color !important;
+  border: 3px solid white;
+  border-radius: 100px;
+  color: rgb(97, 91, 91) !important;
+  font-size: 40px !important;
+  height: 100px;
+  width: 100px;
+}
+
+.calculatorButtons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 10px;
+  margin: 5px;
+  padding: 40px 20px;
+  width: 98%;
+}
+
+.calculatorDisplayBox {
+  background-color: $display-box-color;
+  border: 3px solid rgba(224, 206, 206, 0.5);
+  border-radius: 15% 15% 0% 0%;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - #{$topbar-heigth});
+  justify-content: flex-start;
+  margin: 15px;
+  padding: 40px 20px;
+  width: 98%;
+}
+
+.calculatorOperationButton {
+  background-color: rgb(153, 143, 143) !important;
+  color:$calculator-color !important;
+}
+
+.calculatorOnButton{
+  background-color: rgb(129, 201, 185) !important;
+  font-size: 25px !important;
+}
+
+.calculatorResult{
+  align-items: center;
+  background-color: #a39e58;
+  border: 10px solid rgb(256, 256, 256);
+  border-radius: 20px;
+  display: flex;
+  font-family: monospace;
+  font-size: 50px;
+  height: 100px;
+  justify-content: end;
+  margin: 30px;
+}
+
+.calculatorSolarPower{
+  background-color: #000000;
+  border-radius: 2px;
+  height: 40px;
+  margin-right: 20px;
+  width: 130px;
+}
+
+.calculatorSpecialButton {
+  font-size: 25px !important;
+}
+
+.calculatorSumButton {
+  background-color: rgb(153, 143, 143) !important;
+  color:$calculator-color !important;
+  grid-area: 4 / 5 / 6 / 5;
+  height: 210px !important;
+}
+
+.calculatorTopBar{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.disabledButton{
+  background-color: rgba(237, 222, 222, 0.5) !important;
+  opacity: 0.7 !important;
+  pointer-events: none;
 }
