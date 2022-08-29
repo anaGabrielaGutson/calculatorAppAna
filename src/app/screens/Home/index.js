@@ -27,15 +27,18 @@ const HomeContainer = () => {
 
   const displayValue = element => {
     const lastElementDisplayed = actualDisplayRef.current.charAt(actualDisplayRef.current.length - 1);
+    if (isDot(lastElementDisplayed) && isOperator(element)) replaceLastCharacter(element);
 
-    if (isDot(lastElementDisplayed) && !isDot(element)) replaceLastCharacter(element);
     if (operationStateRef.current === constants.SIN_REALIZAR && isNumber(element)) setDisplay(element);
     else if (actualDisplayRef.current === constants.INICIAL && isNumber(element)) setDisplay(element);
     else if (actualDisplayRef.current === constants.INICIAL && element === constants.SUBTRACTION)
       setDisplay(element);
     else if (actualDisplayRef.current === constants.INICIAL) addCharacter(element);
     else if (isValidNegative(element, lastElementDisplayed)) addCharacter(element);
-    else if (isNewOperator(element, lastElementDisplayed) && isValidPositive(element, lastElementDisplayed))
+    else if (
+      isNewOperator(element, lastElementDisplayed) &&
+      isValidPositive(element, actualDisplayRef.current)
+    )
       deleteLastCharacter();
     else if (isNewOperator(element, lastElementDisplayed)) replaceLastCharacter(element);
     else if (
@@ -47,10 +50,18 @@ const HomeContainer = () => {
     setOperationState(constants.REALIZANDO);
   };
 
-  const displayResult = () => {
-    let result = actualDisplayRef.current
+  const transformToKeyboardDisplay = value =>
+    value
       .replace(constants.DIVISION, constants.KEYBOARD_DIVISION)
       .replace(constants.MULTIPLICATION, constants.KEYBOARD_MULTIPLICATION);
+
+  const transformToCalculatorDisplay = value =>
+    value
+      .replace(constants.KEYBOARD_DIVISION, constants.DIVISION)
+      .replace(constants.KEYBOARD_MULTIPLICATION, constants.MULTIPLICATION);
+
+  const displayResult = () => {
+    let result = transformToKeyboardDisplay(actualDisplayRef.current);
     const lastCharacter = result[result.length - 1];
     if (isOperator(lastCharacter) || isDot(lastCharacter)) result = result.slice(0, -1);
     // eslint-disable-next-line no-eval, no-restricted-globals
@@ -76,7 +87,8 @@ const HomeContainer = () => {
   };
 
   const onKeyDown = e => {
-    if (isNumber(e.key) || isKeyboardOperator(e.key) || e.key === constants.DOT) displayValue(e.key);
+    if (isNumber(e.key) || isKeyboardOperator(e.key) || e.key === constants.DOT)
+      displayValue(transformToCalculatorDisplay(e.key));
     else if (e.key === constants.ENTER || e.key === constants.EQUAL) displayResult(e.key);
     else if (e.key === constants.KEYBOARD_CE) clearLast();
   };
@@ -88,9 +100,8 @@ const HomeContainer = () => {
 
   const buttonRenderer = obj => (
     <UTButton
-      className={`${styles.calculatorButton} ${obj.styles ? obj.styles : ''} ${
-        !obj.onPress ? styles.disabledButton : ''
-      } `}
+      className={`${styles.calculatorButton} ${obj.styles ? obj.styles : ''} 
+        ${!obj.onPress ? styles.disabledButton : ''} `}
       onPress={() => obj.onPress?.(obj.value)}
     >
       {obj.value}

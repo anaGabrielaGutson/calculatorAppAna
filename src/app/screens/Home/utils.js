@@ -27,5 +27,13 @@ export const isValidNegative = (element, lastElementDisplayed) =>
   element === constants.SUBTRACTION &&
   (lastElementDisplayed === constants.MULTIPLICATION || lastElementDisplayed === constants.DIVISION);
 
-export const isValidPositive = (element, lastElementDisplayed) =>
-  element === constants.ADDITION && lastElementDisplayed === constants.SUBTRACTION;
+export const isValidPositive = (element, actualDisplay) => {
+  const lastElementDisplayed = actualDisplay.charAt(actualDisplay.length - 1);
+  const secondToLastElementDisplayed = actualDisplay.charAt(actualDisplay.length - 2);
+
+  return (
+    element === constants.ADDITION &&
+    lastElementDisplayed === constants.SUBTRACTION &&
+    isOperator(secondToLastElementDisplayed)
+  );
+};
