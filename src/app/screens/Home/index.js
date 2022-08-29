@@ -86,20 +86,21 @@ const HomeContainer = () => {
     else restartDisplay();
   };
 
+  // eslint-disable-next-line  
   const onKeyDown = e => {
     if (isNumber(e.key) || isKeyboardOperator(e.key) || e.key === constants.DOT)
-      displayValue(transformToCalculatorDisplay(e.key));
+    displayValue(transformToCalculatorDisplay(e.key));
     else if (e.key === constants.ENTER || e.key === constants.EQUAL) displayResult(e.key);
     else if (e.key === constants.KEYBOARD_CE) clearLast();
   };
-
+  
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, []);
+  }, [onKeyDown]);
 
   const buttonRenderer = obj => (
-    <UTButton
+    <UTButton key={obj.value}
       className={`${styles.calculatorButton} ${obj.styles ? obj.styles : ''} 
         ${!obj.onPress ? styles.disabledButton : ''} `}
       onPress={() => obj.onPress?.(obj.value)}

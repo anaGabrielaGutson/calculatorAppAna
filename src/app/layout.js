@@ -17,6 +17,7 @@ const App = () => (
       <Switch>
         <Route exact path={HOME} component={Home} />
         <Route exact path={HISTORIAL} component={Historial} />
+        <Route component={Home} />
       </Switch>
     </ConnectedRouter>
   </div>
