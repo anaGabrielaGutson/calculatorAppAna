@@ -5,13 +5,25 @@ $shadow: 0 0 7px 0 rgba(122, 122, 122, 0.81);
 
 .container {
   align-items: center;
-  background-color: $topbar-background;
+  background-color: white;
+  border: $black;
   box-shadow: $shadow;
   display: flex;
   height: $topbar-heigth;
   justify-content: space-between;
   padding: 20px;
   width: 100%;
+}
+
+.brand{
+  align-items: center;
+  display: flex;
+  margin: 20px;
+}
+.appName{
+  font-size: 50px !important;
+  font-family: monospace;
+  text-decoration: solid;
 }
 
 .logo {

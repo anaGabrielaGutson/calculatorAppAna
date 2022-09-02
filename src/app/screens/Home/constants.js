@@ -1,23 +1,43 @@
 import styles from './styles.module.scss';
 
-export const ADDITION = '+';
-export const KEYBOARD_CE = 'Backspace';
-export const DIVISION = '÷';
-export const DOT = '.';
-export const ENTER = 'Enter';
+const ADDITION = '+';
+const DIVISION = '÷';
+const DOT = '.';
+const ENTER = 'Enter';
+const INICIAL = '0';
+const KEYBOARD_CE = 'Backspace';
+const KEYBOARD_DIVISION = '/';
+const KEYBOARD_MULTIPLICATION = '*';
+const MULTIPLICATION = 'x';
+const REALIZANDO = 1;
+const SIN_REALIZAR = 0;
+const SUBTRACTION = '-';
+export const EMPTY_EXPONENT = 'e+0';
 export const EQUAL = '=';
 export const ERROR = 'Syntax Error';
-export const ERROR_LAPSE = 500;
-export const INICIAL = '0';
-export const MAX_SENTENCE_LENGTH = 14;
-export const MULTIPLICATION = 'x';
-export const REALIZANDO = 1;
-export const SIN_REALIZAR = 0;
-export const SUBTRACTION = '-';
-export const KEYBOARD_DIVISION = '/';
-export const KEYBOARD_MULTIPLICATION = '*';
+export const ERROR_LAPSE = 1000;
+export const EXPONENT = 'e';
+export const MAX_SENTENCE_LENGTH = 13;
+export const OPERATORS = {
+  ADDITION,
+  DIVISION,
+  DOT,
+  ENTER,
+  EQUAL,
+  KEYBOARD_CE,
+  KEYBOARD_DIVISION,
+  KEYBOARD_MULTIPLICATION,
+  MULTIPLICATION,
+  SUBTRACTION
+};
 
-export const BUTTONS = (displayValue, displayResult, clearAll, clearLast) => [
+export const STATE = {
+  INICIAL,
+  REALIZANDO,
+  SIN_REALIZAR
+};
+
+export const BUTTONS = (clearAll, clearLast, displayResult, displayValue) => [
   { value: 'ON/C', onPress: clearAll, styles: styles.calculatorOnButton },
   { value: 'MC \nMR', styles: styles.calculatorSpecialButton },
   { value: 'M-', styles: styles.calculatorSpecialButton },
@@ -40,6 +60,6 @@ export const BUTTONS = (displayValue, displayResult, clearAll, clearLast) => [
   { value: 'CE', onPress: clearLast, styles: styles.calculatorSpecialButton },
   { value: '0', onPress: displayValue },
   { value: DOT, onPress: displayValue },
-  { value: '=', onPress: displayResult, styles: styles.calculatorSpecialButtonn },
+  { value: EQUAL, onPress: displayResult, styles: styles.calculatorSpecialButtonn },
   { value: ADDITION, onPress: displayValue, styles: styles.calculatorSumButton }
 ];

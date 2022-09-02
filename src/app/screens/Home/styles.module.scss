@@ -1,26 +1,19 @@
 @import 'scss/variables/_sizes.scss';
 @import '_colors.scss';
 
-$calculator-color: #b2e2d4;
-$display-box-color: #6abeb3;
-
-.calculatorContainer {
-  align-items: center;
-  background-color: $calculator-color;
-  border-radius: 10%;
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - #{$topbar-heigth});
-  justify-content: flex-start;
-  margin: 20px auto;
-  width: 600px;
-}
+$calculator-primary-color: #b2e2d4;
+$calculator-secondary-color: rgb(97, 91, 91);
+$calculator-top-border-color: rgba(224, 206, 206, 0.5);
+$calculator-darker-primary-color: rgb(129, 201, 185);
+$calculator-result-display-color: #a39e58;
+$calculator-disabled-button-color: rgba(237, 222, 222, 0.5);
+$calculator-operation-background-color: rgb(153, 143, 143);
 
 .calculatorButton {
-  background-color: $calculator-color !important;
+  background-color: $calculator-primary-color !important;
   border: 3px solid white;
   border-radius: 100px;
-  color: rgb(97, 91, 91) !important;
+  color: $calculator-secondary-color !important;
   font-size: 40px !important;
   height: 100px;
   width: 100px;
@@ -35,9 +28,21 @@ $display-box-color: #6abeb3;
   width: 98%;
 }
 
+.calculatorContainer {
+  align-items: center;
+  background-color: $calculator-primary-color;
+  border-radius: 10%;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - #{$topbar-heigth});
+  justify-content: flex-start;
+  margin: 20px auto;
+  width: 600px;
+}
+
 .calculatorDisplayBox {
-  background-color: $display-box-color;
-  border: 3px solid rgba(224, 206, 206, 0.5);
+  background-color: $calculator-darker-primary-color;
+  border: 3px solid $calculator-top-border-color;
   border-radius: 15% 15% 0% 0%;
   display: flex;
   flex-direction: column;
@@ -48,35 +53,51 @@ $display-box-color: #6abeb3;
   width: 98%;
 }
 
-.calculatorOperationButton {
-  background-color: rgb(153, 143, 143) !important;
-  color:$calculator-color !important;
+.calculatorRecordButton {
+  align-self: flex-start !important;
+  justify-content: flex-start;
 }
 
-.calculatorOnButton{
-  background-color: rgb(129, 201, 185) !important;
+.calculatorOnButton {
+  background-color: $calculator-darker-primary-color !important;
   font-size: 25px !important;
 }
 
-.calculatorResult{
+.calculatorOperationButton {
+  background-color: $calculator-operation-background-color !important;
+  color: $calculator-primary-color !important;
+}
+
+.calculatorResultBox {
   align-items: center;
-  background-color: #a39e58;
-  border: 10px solid rgb(256, 256, 256);
+  background-color: $calculator-result-display-color;
   border-radius: 20px;
+  border: 10px solid rgb(256, 256, 256);
   display: flex;
   font-family: monospace;
   font-size: 50px;
   height: 100px;
-  justify-content: flex-end;
+  justify-content: space-between !important;
   margin: 30px;
 }
 
-.calculatorSolarPower{
-  background-color: #000000;
+.calculatorResultDisplay {
+  align-items: center;
+  font-family: monospace;
+  font-size: 50px;
+}
+
+.calculatorSolarPower {
+  background-color: black;
   border-radius: 2px;
   height: 40px;
   margin-right: 20px;
   width: 130px;
+}
+
+.recordButtonContainer {
+  align-self: baseline;
+  display: flex;
 }
 
 .calculatorSpecialButton {
@@ -84,20 +105,20 @@ $display-box-color: #6abeb3;
 }
 
 .calculatorSumButton {
-  background-color: rgb(153, 143, 143) !important;
-  color:$calculator-color !important;
+  background-color: $calculator-operation-background-color !important;
+  color: $calculator-primary-color !important;
   grid-area: 4 / 5 / 6 / 5;
   height: 210px !important;
 }
 
-.calculatorTopBar{
+.calculatorTopBar {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.disabledButton{
-  background-color: rgba(237, 222, 222, 0.5) !important;
+.disabledButton {
+  background-color: $calculator-disabled-button-color !important;
   opacity: 0.7 !important;
   pointer-events: none;
 }

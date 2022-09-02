@@ -1,81 +1,118 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { UTButton } from '@widergy/energy-ui';
+import { number, arrayOf, shape, string } from 'prop-types';
+
+import ExpressionActions from 'redux/expressions/actions';
 
 import styles from './styles.module.scss';
 import Home from './layout.js';
-import * as constants from './constants';
+import { BUTTONS, ERROR_LAPSE, MAX_SENTENCE_LENGTH, OPERATORS, STATE } from './constants';
 import {
   isDot,
   isKeyboardOperator,
-  isNewOperator,
+  isInfinite,
   isNumber,
   isOperator,
-  isValidDotOrOperator,
+  isValidDot,
   isValidNegative,
-  isValidPositive
+  isValidNewOperator,
+  isValidPositive,
+  lastElementIsOperator,
+  calculateResult,
+  transformToCalculatorDisplay,
+  transformToKeyboardDisplay
 } from './utils';
 import { useMutableState } from './hooks';
 
-const HomeContainer = () => {
-  const [actualDisplayRef, setDisplay] = useMutableState(constants.INICIAL);
-  const [operationStateRef, setOperationState] = useMutableState(constants.SIN_REALIZAR);
+const HomeContainer = ({ lastIndex, editIndex, expressions, dispatch }) => {
+  const [actualDisplayRef, setDisplay] = useMutableState(STATE.INICIAL);
+  const [operationStateRef, setOperationState] = useMutableState(STATE.SIN_REALIZAR);
 
-  const replaceLastCharacter = element => setDisplay(actualDisplayRef.current.slice(0, -1) + element);
+  useEffect(() => {
+    if (editIndex !== null) {
+      const [expressionToEdit] = expressions.filter(({ index }) => index === editIndex);
+      setDisplay(expressionToEdit.value.split(OPERATORS.EQUAL)[0]);
+      dispatch(ExpressionActions.editExpression(null));
+      setOperationState(STATE.REALIZANDO);
+    }
+  }, []);
+
   const addCharacter = element => setDisplay(actualDisplayRef.current + element);
   const deleteLastCharacter = () => setDisplay(actualDisplayRef.current.slice(0, -1));
+  const replaceLastCharacter = element => setDisplay(actualDisplayRef.current.slice(0, -1) + element);
+  const replaceOperators = element => setDisplay(actualDisplayRef.current.slice(0, -2) + element);
 
-  const displayValue = element => {
-    const lastElementDisplayed = actualDisplayRef.current.charAt(actualDisplayRef.current.length - 1);
-    if (isDot(lastElementDisplayed) && isOperator(element)) replaceLastCharacter(element);
+  const executeActionWhenInitialState = element =>
+    isNumber(element) || element === OPERATORS.SUBTRACTION ? setDisplay(element) : addCharacter(element);
 
-    if (operationStateRef.current === constants.SIN_REALIZAR && isNumber(element)) setDisplay(element);
-    else if (actualDisplayRef.current === constants.INICIAL && isNumber(element)) setDisplay(element);
-    else if (actualDisplayRef.current === constants.INICIAL && element === constants.SUBTRACTION)
-      setDisplay(element);
-    else if (actualDisplayRef.current === constants.INICIAL) addCharacter(element);
-    else if (isValidNegative(element, lastElementDisplayed)) addCharacter(element);
-    else if (
-      isNewOperator(element, lastElementDisplayed) &&
-      isValidPositive(element, actualDisplayRef.current)
-    )
-      deleteLastCharacter();
-    else if (isNewOperator(element, lastElementDisplayed)) replaceLastCharacter(element);
-    else if (
-      isValidDotOrOperator(element, lastElementDisplayed, actualDisplayRef.current) ||
-      isNumber(element)
-    )
-      addCharacter(element);
-
-    setOperationState(constants.REALIZANDO);
+  const executeActionIfPossibleWhenLastElementIsOperator = (element, lastElement, secondToLastElement) => {
+    if (isValidNegative(element, lastElement)) addCharacter(element);
+    else if (isValidNewOperator(secondToLastElement)) replaceLastCharacter(element);
+    else if (isValidPositive(element, lastElement, secondToLastElement)) deleteLastCharacter();
+    else if (lastElement === OPERATORS.SUBTRACTION) replaceOperators(element);
   };
 
-  const transformToKeyboardDisplay = value =>
-    value
-      .replace(constants.DIVISION, constants.KEYBOARD_DIVISION)
-      .replace(constants.MULTIPLICATION, constants.KEYBOARD_MULTIPLICATION);
+  const executeActionWhenElementIsOperator = (element, lastElement, secondToLastElement) =>
+    lastElementIsOperator(lastElement)
+      ? executeActionIfPossibleWhenLastElementIsOperator(element, lastElement, secondToLastElement)
+      : addCharacter(element);
 
-  const transformToCalculatorDisplay = value =>
-    value
-      .replace(constants.KEYBOARD_DIVISION, constants.DIVISION)
-      .replace(constants.KEYBOARD_MULTIPLICATION, constants.MULTIPLICATION);
+  const lastElementOfSentence = sentence => sentence.charAt(sentence.length - 1);
+
+  const secondToLastElementOfSentence = sentence => sentence.charAt(sentence.length - 2);
+
+  const lastTwoElementsDisplayed = () => [
+    lastElementOfSentence(actualDisplayRef.current),
+    secondToLastElementOfSentence(actualDisplayRef.current)
+  ];
+
+  const displayValue = newElement => {
+    let [lastElement, secondToLastElement] = lastTwoElementsDisplayed();
+
+    if (isDot(lastElement) && isOperator(newElement)) {
+      deleteLastCharacter();
+      [lastElement, secondToLastElement] = lastTwoElementsDisplayed();
+    }
+
+    if (operationStateRef.current === STATE.SIN_REALIZAR && isNumber(newElement)) setDisplay(newElement);
+    else if (actualDisplayRef.current === STATE.INICIAL) executeActionWhenInitialState(newElement);
+    else if (isOperator(newElement))
+      executeActionWhenElementIsOperator(newElement, lastElement, secondToLastElement);
+    else if (isValidDot(newElement, lastElement, actualDisplayRef.current) || isNumber(newElement))
+      addCharacter(newElement);
+
+    setOperationState(STATE.REALIZANDO);
+  };
+
+  const saveExpression = (expression, result) =>
+    dispatch(
+      ExpressionActions.addExpression({
+        value: `${expression} ${OPERATORS.EQUAL} ${result}`,
+        index: lastIndex
+      })
+    );
 
   const displayResult = () => {
-    let result = transformToKeyboardDisplay(actualDisplayRef.current);
-    const lastCharacter = result[result.length - 1];
-    if (isOperator(lastCharacter) || isDot(lastCharacter)) result = result.slice(0, -1);
-    // eslint-disable-next-line no-eval, no-restricted-globals
-    if (isFinite(eval(result))) setDisplay(eval(result).toString());
-    else {
-      setDisplay(constants.ERROR);
-      setTimeout(() => setDisplay(constants.INICIAL), constants.ERROR_LAPSE);
-    }
-    setOperationState(constants.SIN_REALIZAR);
+    const expression = actualDisplayRef.current;
+    let keyboardExpression = transformToKeyboardDisplay(expression);
+    const lastCharacter = lastElementOfSentence(keyboardExpression);
+
+    if (isOperator(lastCharacter) || isDot(lastCharacter))
+      keyboardExpression = keyboardExpression.slice(0, -1);
+
+    const result = calculateResult(keyboardExpression);
+    setDisplay(result);
+
+    if (isInfinite(result)) setTimeout(() => setDisplay(STATE.INICIAL), ERROR_LAPSE);
+
+    saveExpression(expression, result);
+    setOperationState(STATE.SIN_REALIZAR);
   };
 
   const restartDisplay = () => {
-    setOperationState(constants.SIN_REALIZAR);
-    setDisplay(constants.INICIAL);
+    setOperationState(STATE.SIN_REALIZAR);
+    setDisplay(STATE.INICIAL);
   };
 
   const clearAll = () => restartDisplay();
@@ -86,21 +123,22 @@ const HomeContainer = () => {
     else restartDisplay();
   };
 
-  // eslint-disable-next-line  
+  // eslint-disable-next-line
   const onKeyDown = e => {
-    if (isNumber(e.key) || isKeyboardOperator(e.key) || e.key === constants.DOT)
-    displayValue(transformToCalculatorDisplay(e.key));
-    else if (e.key === constants.ENTER || e.key === constants.EQUAL) displayResult(e.key);
-    else if (e.key === constants.KEYBOARD_CE) clearLast();
+    if (isNumber(e.key) || isKeyboardOperator(e.key) || e.key === OPERATORS.DOT)
+      displayValue(transformToCalculatorDisplay(e.key));
+    else if (e.key === OPERATORS.ENTER || e.key === OPERATORS.EQUAL) displayResult(e.key);
+    else if (e.key === OPERATORS.KEYBOARD_CE) clearLast();
   };
-  
+
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [onKeyDown]);
 
   const buttonRenderer = obj => (
-    <UTButton key={obj.value}
+    <UTButton
+      key={obj.value}
       className={`${styles.calculatorButton} ${obj.styles ? obj.styles : ''} 
         ${!obj.onPress ? styles.disabledButton : ''} `}
       onPress={() => obj.onPress?.(obj.value)}
@@ -110,11 +148,9 @@ const HomeContainer = () => {
   );
 
   const sentenceToDisplay = sentence =>
-    sentence.length > constants.MAX_SENTENCE_LENGTH
-      ? sentence.slice(-constants.MAX_SENTENCE_LENGTH)
-      : sentence;
+    sentence.length > MAX_SENTENCE_LENGTH ? sentence.slice(-MAX_SENTENCE_LENGTH) : sentence;
 
-  const valuesToMap = constants.BUTTONS(displayValue, displayResult, clearAll, clearLast);
+  const valuesToMap = BUTTONS(clearAll, clearLast, displayResult, displayValue);
 
   return (
     <Home
@@ -126,4 +162,16 @@ const HomeContainer = () => {
   );
 };
 
-export default connect()(HomeContainer);
+HomeContainer.propTypes = {
+  expressions: arrayOf(shape({ value: string, index: number })),
+  lastIndex: number,
+  editIndex: number
+};
+
+const mapStateToProps = state => ({
+  lastIndex: state.expressions.actualIndex,
+  editIndex: state.expressions.editIndex,
+  expressions: state.expressions.expressions
+});
+
+export default connect(mapStateToProps)(HomeContainer);
