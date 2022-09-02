@@ -1,5 +1,9 @@
 # Online Calculator
 
+In this calculator you can:
+- perform mathematical operations,
+- see the history of operations performed.
+
 ## Steps to run it and play
 
 - Clone the repo locally
@@ -17,3 +21,8 @@ yarn start
 ```
 
 - Start developing! 🎆
+
+
+_____________________________________
+
+Made for WIDERGY using Redux.js y React.js.
