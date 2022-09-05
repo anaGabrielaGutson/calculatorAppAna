@@ -7,8 +7,6 @@ const canAddDot = sentence => {
 
 export const isDot = character => character === OPERATORS.DOT;
 
-export const isInfinite = n => n === n / 0;
-
 export const isKeyboardOperator = character =>
   [
     OPERATORS.ADDITION,
@@ -34,6 +32,8 @@ export const isValidPositive = (element, lastElement, secondToLastElement) =>
 
 export const lastElementIsOperator = lastElement => isOperator(lastElement);
 
+export const lastElementOfSentence = sentence => sentence.charAt(sentence.length - 1);
+
 const isInScientificNotation = number => number.includes(OPERATORS.DOT) && number.includes(EXPONENT);
 
 const adjustNumberLengthWhenInScientificNotation = expression => {
@@ -58,10 +58,13 @@ const roundResult = originalResult => {
   return resultAsText;
 };
 
+export const secondToLastElementOfSentence = sentence => sentence.charAt(sentence.length - 2);
+
 export const calculateResult = expression => {
   // eslint-disable-next-line no-eval
   const result = eval(expression);
-  return !isInfinite(result) ? roundResult(result.toString()) : ERROR;
+  // eslint-disable-next-line no-restricted-globals
+  return isFinite(result) ? roundResult(result.toString()) : ERROR;
 };
 
 export const transformToCalculatorDisplay = value =>

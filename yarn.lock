@@ -2069,7 +2069,7 @@
     "@webassemblyjs/wast-parser" "1.8.5"
     "@xtuc/long" "4.2.2"
 
-"@widergy/energy-hooks@^1.0.0":
+"@widergy/energy-hooks@^1.0.0", "@widergy/energy-hooks@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@widergy/energy-hooks/-/energy-hooks-1.0.2.tgz#54f5d9240f42c433fc40b3754f7b220d41081c54"
   integrity sha512-95O1x1Rj0zDBZOrBk4y8bykmQlS0MGz5DuFMEg5//U6RaVyTi5wkX1E4dm3HLI1sAzjHc8fc+ybTucHREHh+/Q==

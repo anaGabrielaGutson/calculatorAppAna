@@ -2,12 +2,12 @@
 @import '_colors.scss';
 
 $calculator-primary-color: #b2e2d4;
-$calculator-secondary-color: rgb(97, 91, 91);
-$calculator-top-border-color: rgba(224, 206, 206, 0.5);
-$calculator-darker-primary-color: rgb(129, 201, 185);
+$calculator-secondary-color: #615B5B;
+$calculator-top-border-color: #e0cece80;
+$calculator-darker-primary-color: #81c9b9;
 $calculator-result-display-color: #a39e58;
-$calculator-disabled-button-color: rgba(237, 222, 222, 0.5);
-$calculator-operation-background-color: rgb(153, 143, 143);
+$calculator-disabled-button-color: #eddede80;
+$calculator-operation-background-color: #998f8f;
 
 .calculatorButton {
   background-color: $calculator-primary-color !important;
@@ -77,7 +77,7 @@ $calculator-operation-background-color: rgb(153, 143, 143);
   font-family: monospace;
   font-size: 50px;
   height: 100px;
-  justify-content: space-between !important;
+  justify-content: space-between;
   margin: 30px;
 }
 
@@ -108,7 +108,7 @@ $calculator-operation-background-color: rgb(153, 143, 143);
   background-color: $calculator-operation-background-color !important;
   color: $calculator-primary-color !important;
   grid-area: 4 / 5 / 6 / 5;
-  height: 210px !important;
+  height: 210px;
 }
 
 .calculatorTopBar {

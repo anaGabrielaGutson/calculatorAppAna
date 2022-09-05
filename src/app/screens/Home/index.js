@@ -2,16 +2,17 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { UTButton } from '@widergy/energy-ui';
 import { number, arrayOf, shape, string } from 'prop-types';
+import { useMutableState } from '@widergy/energy-hooks';
 
 import ExpressionActions from 'redux/expressions/actions';
 
 import styles from './styles.module.scss';
 import Home from './layout.js';
-import { BUTTONS, ERROR_LAPSE, MAX_SENTENCE_LENGTH, OPERATORS, STATE } from './constants';
+import { BUTTONS, ERROR, MAX_SENTENCE_LENGTH, OPERATORS, STATE } from './constants';
 import {
+  calculateResult,
   isDot,
   isKeyboardOperator,
-  isInfinite,
   isNumber,
   isOperator,
   isValidDot,
@@ -19,11 +20,11 @@ import {
   isValidNewOperator,
   isValidPositive,
   lastElementIsOperator,
-  calculateResult,
+  lastElementOfSentence,
+  secondToLastElementOfSentence,
   transformToCalculatorDisplay,
   transformToKeyboardDisplay
 } from './utils';
-import { useMutableState } from './hooks';
 
 const HomeContainer = ({ lastIndex, editIndex, expressions, dispatch }) => {
   const [actualDisplayRef, setDisplay] = useMutableState(STATE.INICIAL);
@@ -58,10 +59,6 @@ const HomeContainer = ({ lastIndex, editIndex, expressions, dispatch }) => {
       ? executeActionIfPossibleWhenLastElementIsOperator(element, lastElement, secondToLastElement)
       : addCharacter(element);
 
-  const lastElementOfSentence = sentence => sentence.charAt(sentence.length - 1);
-
-  const secondToLastElementOfSentence = sentence => sentence.charAt(sentence.length - 2);
-
   const lastTwoElementsDisplayed = () => [
     lastElementOfSentence(actualDisplayRef.current),
     secondToLastElementOfSentence(actualDisplayRef.current)
@@ -70,6 +67,7 @@ const HomeContainer = ({ lastIndex, editIndex, expressions, dispatch }) => {
   const displayValue = newElement => {
     let [lastElement, secondToLastElement] = lastTwoElementsDisplayed();
 
+    if (actualDisplayRef.current === ERROR) setDisplay(STATE.INICIAL);
     if (isDot(lastElement) && isOperator(newElement)) {
       deleteLastCharacter();
       [lastElement, secondToLastElement] = lastTwoElementsDisplayed();
@@ -103,8 +101,6 @@ const HomeContainer = ({ lastIndex, editIndex, expressions, dispatch }) => {
 
     const result = calculateResult(keyboardExpression);
     setDisplay(result);
-
-    if (isInfinite(result)) setTimeout(() => setDisplay(STATE.INICIAL), ERROR_LAPSE);
 
     saveExpression(expression, result);
     setOperationState(STATE.SIN_REALIZAR);

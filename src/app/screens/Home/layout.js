@@ -47,7 +47,7 @@ const Home = ({ valuesToMap, sentenceToDisplay, actualDisplay, buttonRenderer })
           <div className={styles.calculatorResultDisplay}>{sentenceToDisplay(actualDisplay)}</div>
         </div>
       </div>
-      <div className={styles.calculatorButtons}>{valuesToMap.map(obj => buttonRenderer(obj))}</div>
+      <div className={styles.calculatorButtons}>{valuesToMap.map(buttonRenderer)}</div>
     </div>
   );
 };

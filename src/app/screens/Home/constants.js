@@ -15,7 +15,6 @@ const SUBTRACTION = '-';
 export const EMPTY_EXPONENT = 'e+0';
 export const EQUAL = '=';
 export const ERROR = 'Syntax Error';
-export const ERROR_LAPSE = 1000;
 export const EXPONENT = 'e';
 export const MAX_SENTENCE_LENGTH = 13;
 export const OPERATORS = {
