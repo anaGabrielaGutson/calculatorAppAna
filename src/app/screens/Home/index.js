@@ -10,6 +10,7 @@ import styles from './styles.module.scss';
 import Home from './layout.js';
 import { BUTTONS, ERROR, MAX_SENTENCE_LENGTH, OPERATORS, STATE } from './constants';
 import {
+  adjustExpression,
   calculateResult,
   isDot,
   isKeyboardOperator,
@@ -26,18 +27,17 @@ import {
   transformToKeyboardDisplay
 } from './utils';
 
-const HomeContainer = ({ lastIndex, editIndex, expressions, dispatch }) => {
+const HomeContainer = ({ editIndex, expressions, dispatch }) => {
   const [actualDisplayRef, setDisplay] = useMutableState(STATE.INICIAL);
   const [operationStateRef, setOperationState] = useMutableState(STATE.SIN_REALIZAR);
 
   useEffect(() => {
     if (editIndex !== null) {
-      const [expressionToEdit] = expressions.filter(({ index }) => index === editIndex);
-      setDisplay(expressionToEdit.value.split(OPERATORS.EQUAL)[0]);
-      dispatch(ExpressionActions.editExpression(null));
+      const [expressionToEdit] = expressions.filter(({ id }) => id === editIndex);
+      setDisplay(expressionToEdit.value.split(OPERATORS.EQUAL)[0].trim());
       setOperationState(STATE.REALIZANDO);
     }
-  }, []);
+  }, [editIndex]);
 
   const addCharacter = element => setDisplay(actualDisplayRef.current + element);
   const deleteLastCharacter = () => setDisplay(actualDisplayRef.current.slice(0, -1));
@@ -83,13 +83,11 @@ const HomeContainer = ({ lastIndex, editIndex, expressions, dispatch }) => {
     setOperationState(STATE.REALIZANDO);
   };
 
-  const saveExpression = (expression, result) =>
-    dispatch(
-      ExpressionActions.addExpression({
-        value: `${expression} ${OPERATORS.EQUAL} ${result}`,
-        index: lastIndex
-      })
-    );
+  const saveExpression = (expression, result) => {
+    const expressionToSave = `${expression} ${OPERATORS.EQUAL} ${result}`;
+    if (editIndex === null) dispatch(ExpressionActions.addExpression(expressionToSave));
+    else dispatch(ExpressionActions.editExpression(editIndex, expressionToSave));
+  };
 
   const displayResult = () => {
     const expression = actualDisplayRef.current;
@@ -102,7 +100,7 @@ const HomeContainer = ({ lastIndex, editIndex, expressions, dispatch }) => {
     const result = calculateResult(keyboardExpression);
     setDisplay(result);
 
-    saveExpression(expression, result);
+    saveExpression(adjustExpression(expression), result);
     setOperationState(STATE.SIN_REALIZAR);
   };
 
@@ -160,12 +158,10 @@ const HomeContainer = ({ lastIndex, editIndex, expressions, dispatch }) => {
 
 HomeContainer.propTypes = {
   expressions: arrayOf(shape({ value: string, index: number })),
-  lastIndex: number,
   editIndex: number
 };
 
 const mapStateToProps = state => ({
-  lastIndex: state.expressions.actualIndex,
   editIndex: state.expressions.editIndex,
   expressions: state.expressions.expressions
 });

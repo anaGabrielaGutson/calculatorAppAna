@@ -1,16 +1,8 @@
 .deleteAllButton {
   margin: 40px;
-}
-
-.deleteAllButton:hover {
-  background-color: red;
-}
-
-.deleteButton {
-  padding: 5px !important;
 
   &:hover {
-    background-color: pink;
+    background-color: red;
   }
 }
 
@@ -20,44 +12,10 @@
   text-decoration: solid;
 }
 
-.expression {
-  font-family: monospace !important;
-  font-size: 20px !important;
-  margin: auto 10px auto 0;
-  padding: 20px;
-}
-
-.expressionButtonsContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.expressionContainer {
-  border-radius: 20px;
-  border: 3px solid rgba(224, 206, 206, 0.5);
-  display: flex;
-  height: auto;
-  justify-content: space-between;
-  margin: 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: auto;
-}
-
 .expressionsContainer {
   display: flex;
   flex-direction: column;
   margin: 20px;
-}
-
-.editButton {
-  padding: 5px !important;
-
-  &:hover {
-    background-color: yellow;
-  }
 }
 
 .titleBar {

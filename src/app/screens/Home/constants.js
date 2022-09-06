@@ -62,3 +62,11 @@ export const BUTTONS = (clearAll, clearLast, displayResult, displayValue) => [
   { value: EQUAL, onPress: displayResult, styles: styles.calculatorSpecialButtonn },
   { value: ADDITION, onPress: displayValue, styles: styles.calculatorSumButton }
 ];
+
+export const TOOLTIP_CONFIG = {
+  placement: 'top',
+  interactive: false,
+  arrow: false,
+  boundary: 'viewport',
+  appendTo: document.body
+};

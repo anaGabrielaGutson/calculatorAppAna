@@ -1,5 +1,16 @@
 import { EMPTY_EXPONENT, EXPONENT, ERROR, MAX_SENTENCE_LENGTH, OPERATORS } from './constants';
 
+export const adjustExpression = expression =>
+  [
+    OPERATORS.ADDITION,
+    OPERATORS.SUBTRACTION,
+    OPERATORS.MULTIPLICATION,
+    OPERATORS.DIVISION,
+    OPERATORS.DOT
+  ].includes(expression.slice(-1))
+    ? expression.slice(0, -1)
+    : expression;
+
 const canAddDot = sentence => {
   const groups = sentence.split(/[+]|[-]|[x]|[÷]/);
   return !groups[groups.length - 1].includes(OPERATORS.DOT);

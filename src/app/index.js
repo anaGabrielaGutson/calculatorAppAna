@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect } from 'react';
 import Rollbar from 'rollbar';
 import ReactGA from 'react-ga';
 import { disableReactDevTools } from '@widergy/web-utils/lib/config';
@@ -7,9 +7,8 @@ import { EnergyThemeProvider } from '@widergy/energy-ui';
 import App from './layout';
 import { energyUITheme } from './styles';
 
-class AppContainer extends PureComponent {
-  constructor(props) {
-    super(props);
+const AppContainer = () => {
+  useEffect(() => {
     Rollbar.init({
       accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,
       captureUncaught: true,
@@ -20,22 +19,18 @@ class AppContainer extends PureComponent {
       }
     });
     window.Rollbar = Rollbar;
-  }
 
-  componentDidMount() {
     ReactGA.set({ userId: 1 });
     disableReactDevTools(process.env.REACT_APP_ENV);
-  }
+  }, []);
 
-  render() {
-    return (
-      <div>
-        <EnergyThemeProvider theme={energyUITheme}>
-          <App />
-        </EnergyThemeProvider>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <EnergyThemeProvider theme={energyUITheme}>
+        <App />
+      </EnergyThemeProvider>
+    </div>
+  );
+};
 
 export default AppContainer;

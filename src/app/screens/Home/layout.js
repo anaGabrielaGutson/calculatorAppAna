@@ -9,31 +9,11 @@ import { RECORD } from 'constants/routes';
 
 import { ReactComponent as Icon } from '../../assets/record_icon.svg';
 
+import { TOOLTIP_CONFIG } from './constants';
 import styles from './styles.module.scss';
 
 const Home = ({ valuesToMap, sentenceToDisplay, actualDisplay, buttonRenderer }) => {
   const dispatch = useDispatch();
-
-  const goToRecordButtonTippyProps = () => ({
-    placement: 'top',
-    interactive: false,
-    arrow: false,
-    boundary: 'viewport',
-    appendTo: document.body
-  });
-
-  const goToRecordButtonRenderer = () => (
-    <UTTooltip
-      content={<span>{i18.t('Calculator:recordButton')}</span>}
-      tippyProps={goToRecordButtonTippyProps()}
-    >
-      <span className={styles.recordButtonContainer}>
-        <UTIconButton className={styles.calculatorRecordButton} onClick={() => dispatch(push(RECORD))}>
-          <Icon />
-        </UTIconButton>
-      </span>
-    </UTTooltip>
-  );
 
   return (
     <div className={styles.calculatorContainer}>
@@ -43,7 +23,13 @@ const Home = ({ valuesToMap, sentenceToDisplay, actualDisplay, buttonRenderer })
           <div className={styles.calculatorSolarPower} />
         </div>
         <div className={styles.calculatorResultBox}>
-          {goToRecordButtonRenderer()}
+          <UTTooltip content={<span>{i18.t('Calculator:recordButton')}</span>} tippyProps={TOOLTIP_CONFIG}>
+            <span className={styles.recordButtonContainer}>
+              <UTIconButton className={styles.calculatorRecordButton} onClick={() => dispatch(push(RECORD))}>
+                <Icon />
+              </UTIconButton>
+            </span>
+          </UTTooltip>
           <div className={styles.calculatorResultDisplay}>{sentenceToDisplay(actualDisplay)}</div>
         </div>
       </div>

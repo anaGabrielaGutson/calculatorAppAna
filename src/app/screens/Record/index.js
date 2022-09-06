@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { UTIconButton, UTLabel } from '@widergy/energy-ui';
@@ -9,75 +9,46 @@ import i18 from 'i18next';
 import { HOME } from 'constants/routes';
 import ExpressionActions from 'redux/expressions/actions';
 
-import { ReactComponent as DeleteElementIcon } from '../../assets/delete_icon.svg';
 import { ReactComponent as TrashIcon } from '../../assets/trash_icon.svg';
-import { ReactComponent as EditIcon } from '../../assets/edit_icon.svg';
 import { ReactComponent as BackPageIcon } from '../../assets/backpage_icon.svg';
 
+import Expression from './Components/Expression';
 import styles from './styles.module.scss';
 
 const Record = ({ expressions, dispatch }) => {
-  const removeAllExpressionsButtonRenderer = () => (
-    <UTIconButton
-      className={styles.deleteAllButton}
-      onClick={() => dispatch(ExpressionActions.removeAllExpressions())}
-    >
-      <TrashIcon />
-    </UTIconButton>
-  );
+  useEffect(() => {
+    dispatch(ExpressionActions.fetchExpressions());
+  }, []);
 
-  const goBackToCalculatorButtonRenderer = () => (
-    <UTIconButton style={{ borderRadius: '10px' }} onClick={() => dispatch(push(HOME))}>
-      <BackPageIcon /> {i18.t('Record:goBack')}
-    </UTIconButton>
-  );
-
-  const removeExpressionButtonRenderer = expression => (
-    <UTIconButton
-      className={styles.deleteButton}
-      onClick={() => dispatch(ExpressionActions.removeExpression(expression.index))}
-    >
-      <DeleteElementIcon />
-    </UTIconButton>
-  );
-
-  const editExpressionButtonRenderer = expression => (
-    <UTIconButton
-      className={styles.editButton}
-      onClick={() => {
-        dispatch(ExpressionActions.editExpression(expression.index, () => dispatch(push(HOME))));
-        dispatch(push(HOME));
-      }}
-    >
-      <EditIcon />
-    </UTIconButton>
-  );
-
-  const expressionRenderer = expression => (
-    <div className={styles.expressionContainer}>
-      <UTLabel className={styles.expression}>{expression.value}</UTLabel>
-      <div className={styles.expressionButtonsContainer}>
-        {removeExpressionButtonRenderer(expression)}
-        {editExpressionButtonRenderer(expression)}
-      </div>
-    </div>
-  );
-
-  const noExpressionsRenderer = () => (
-    <UTLabel className={styles.emptyExpressionsText}>{i18.t('Record:emptyRecord')}</UTLabel>
-  );
-
-  const expressionsRenderer = () =>
-    isEmpty(expressions) ? noExpressionsRenderer() : expressions.map(expressionRenderer);
+  const handlerDeleteAll = async () => {
+    expressions.forEach((expression, i) => {
+      setTimeout(() => {
+        dispatch(ExpressionActions.deleteExpression(expression.id));
+        dispatch(ExpressionActions.fetchExpressions());
+      }, i * 100);
+    });
+  };
 
   return (
     <div>
-      {goBackToCalculatorButtonRenderer()}
+      <UTIconButton style={{ borderRadius: '10px' }} onClick={() => dispatch(push(HOME))}>
+        <BackPageIcon /> {i18.t('Record:goBack')}
+      </UTIconButton>
       <div className={styles.titleBar}>
         <UTLabel className={styles.titleText}>{i18.t('Record:title')}</UTLabel>
-        {!isEmpty(expressions) && removeAllExpressionsButtonRenderer()}
+        {!isEmpty(expressions) && (
+          <UTIconButton className={styles.deleteAllButton} onClick={handlerDeleteAll}>
+            <TrashIcon />
+          </UTIconButton>
+        )}
       </div>
-      <div className={styles.expressionsContainer}>{expressionsRenderer()}</div>
+      <div className={styles.expressionsContainer}>
+        {isEmpty(expressions) ? (
+          <UTLabel className={styles.emptyExpressionsText}>{i18.t('Record:emptyRecord')}</UTLabel>
+        ) : (
+          expressions.map(expression => <Expression {...expression} key={expression.id} />)
+        )}
+      </div>
     </div>
   );
 };
