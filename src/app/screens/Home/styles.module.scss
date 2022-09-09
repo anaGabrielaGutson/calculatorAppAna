@@ -1,18 +1,22 @@
 @import 'scss/variables/_sizes.scss';
 @import '_colors.scss';
 
-$calculator-primary-color: #b2e2d4;
-$calculator-secondary-color: #615B5B;
-$calculator-top-border-color: #e0cece80;
 $calculator-darker-primary-color: #81c9b9;
-$calculator-result-display-color: #a39e58;
 $calculator-disabled-button-color: #eddede80;
 $calculator-operation-background-color: #998f8f;
+$calculator-primary-color: #b2e2d4;
+$calculator-result-display-color: #a39e58;
+$calculator-secondary-color: #615b5b;
+$calculator-top-border-color: #e0cece80;
+
+.container {
+  padding: 30px;
+}
 
 .calculatorButton {
   background-color: $calculator-primary-color !important;
-  border: 3px solid white;
   border-radius: 100px;
+  border: 3px solid white;
   color: $calculator-secondary-color !important;
   font-size: 40px !important;
   height: 100px;
@@ -21,8 +25,8 @@ $calculator-operation-background-color: #998f8f;
 
 .calculatorButtons {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
   grid-gap: 10px;
+  grid-template-columns: repeat(5, 1fr);
   margin: 5px;
   padding: 40px 20px;
   width: 98%;
@@ -36,14 +40,14 @@ $calculator-operation-background-color: #998f8f;
   flex-direction: column;
   height: calc(100% - #{$topbar-heigth});
   justify-content: flex-start;
-  margin: 20px auto;
+  margin: 0px auto;
   width: 600px;
 }
 
 .calculatorDisplayBox {
   background-color: $calculator-darker-primary-color;
-  border: 3px solid $calculator-top-border-color;
   border-radius: 15% 15% 0% 0%;
+  border: 3px solid $calculator-top-border-color;
   display: flex;
   flex-direction: column;
   height: calc(100% - #{$topbar-heigth});

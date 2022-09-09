@@ -1,11 +1,13 @@
 // sass-lint:disable no-url-domains
 // sass-lint:disable no-url-protocols
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700,900');
+$background-color: #e8faf6;
 
 html,
 body {
   font-family: 'Poppins', sans-serif;
   height: 100%;
+  background-color: $background-color;
   margin: 0;
   padding: 0;
 

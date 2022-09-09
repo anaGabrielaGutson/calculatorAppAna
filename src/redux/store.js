@@ -6,6 +6,7 @@ import { reducer as formReducer } from 'redux-form';
 import { fetchMiddleware } from 'redux-recompose';
 
 import { reducer as expressions } from './expressions/reducer';
+import { reducer as userInformation } from './userInformation/reducer';
 
 export const history = createBrowserHistory();
 
@@ -27,6 +28,7 @@ const form = formReducer.plugin({
 
 const reducers = combineReducers({
   expressions,
+  userInformation,
   router: connectRouter(history),
   form
 });
@@ -36,9 +38,6 @@ const enhancers = [];
 
 /* ------------- Thunk Middleware ------------- */
 middlewares.push(thunk);
-
-/* ------------- Analytics Middleware ------------- */
-//middlewares.push(AnalyticsMiddleware);
 
 /* ------------- Redux-composer Middleware ------------- */
 middlewares.push(fetchMiddleware);

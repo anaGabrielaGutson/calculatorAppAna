@@ -1,0 +1,56 @@
+.formAndTextContainer {
+  align-content: center;
+  display: flex;
+  justify-content: space-around;
+  margin: 3rem auto 0px auto;
+  width: 80%;
+  @media only screen and (max-width: 800px) {
+    flex-direction: column;
+  }
+}
+
+.formContainer {
+  @media only screen and (max-width: 800px) {
+    width: 100%;
+  }
+}
+
+.formField {
+  margin: 0.5rem;
+}
+
+.inputRow {
+  display: flex;
+  justify-content: center;
+}
+
+.submitButton {
+  background-color: transparent !important;
+  border: 1px rgb(187, 186, 186) solid;
+  color: black !important;
+  font-family: monospace;
+  font-size: 0.9rem !important;
+  margin: 0.5rem;
+  width: 100%;
+}
+
+.text {
+  font-size: 0.9rem !important;
+  margin-bottom: 12px;
+  text-align: start;
+}
+
+.textContainer {
+  max-width: 600px;
+  margin-bottom: 2rem;
+  @media only screen and (max-width: 800px) {
+    width: 100%;
+  }
+}
+
+.titleText {
+  font-size: 2rem !important;
+  margin: 2rem auto 2rem auto;
+  text-align: center;
+  width: 50%;
+}
