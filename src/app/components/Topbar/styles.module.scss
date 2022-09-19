@@ -3,9 +3,42 @@
 
 $shadow: 0 0 7px 0 rgba(122, 122, 122, 0.81);
 
+.appName {
+  font-family: monospace;
+  font-size: 50px !important;
+  text-decoration: solid;
+}
+
+.brand {
+  align-items: center;
+  display: flex;
+  margin: 20px;
+}
+
+.brandInfoContainer {
+  align-items: center;
+  display: flex;
+  flex-flow: column nowrap;
+  height: 80px;
+  justify-content: flex-end;
+}
+
+.contactUsButton {
+  background-color: white !important;
+  box-shadow: none;
+  color: black !important;
+  font-family: monospace;
+  font-size: 10px !important;
+  justify-self: flex-end;
+  margin-top: 10px !important;
+  padding: 0px !important;
+  text-decoration: solid;
+}
+
 .container {
   align-items: center;
-  background-color: $topbar-background;
+  background-color: white;
+  border: $black;
   box-shadow: $shadow;
   display: flex;
   height: $topbar-heigth;

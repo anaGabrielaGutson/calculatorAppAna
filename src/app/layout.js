@@ -1,14 +1,15 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 import { history } from 'redux/store';
-import { HOME, QUOTES } from 'constants/routes';
+import { HOME, RECORD, CONTACT_US } from 'constants/routes';
 
-import Topbar from './components/Topbar';
+import ContactUs from './screens/ContactUs';
 import Home from './screens/Home';
-import Quotes from './screens/Quotes';
+import Record from './screens/Record';
 import styles from './styles.module.scss';
+import Topbar from './components/Topbar';
 
 const App = () => (
   <div className={styles.container}>
@@ -16,7 +17,8 @@ const App = () => (
     <ConnectedRouter history={history}>
       <Switch>
         <Route exact path={HOME} component={Home} />
-        <Route exact path={QUOTES} component={Quotes} />
+        <Route exact path={RECORD} component={Record} />
+        <Route exact path={CONTACT_US} component={ContactUs} />
         <Route render={() => <Redirect to={HOME} />} />
       </Switch>
     </ConnectedRouter>

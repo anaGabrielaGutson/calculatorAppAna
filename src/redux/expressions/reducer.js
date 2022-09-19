@@ -4,13 +4,22 @@ import { completeReducer, createReducer } from 'redux-recompose';
 import { actions } from './actions';
 
 export const defaultState = {
-  quotes: []
+  editIndex: null,
+  expressions: []
 };
 
 const reducerDescription = {
-  primaryActions: [actions.GET_QUOTES],
+  primaryActions: [
+    actions.ADD_EXPRESSION,
+    actions.DELETE_EXPRESSION,
+    actions.EDIT_EXPRESSION,
+    actions.FETCH_EXPRESSIONS
+  ],
   override: {
-    [actions.RESET_QUOTES]: state => Immutable.merge(state, { quotes: defaultState.quotes })
+    [actions.REWRITE_EXPRESSION]: (state, action) =>
+      Immutable.merge(state, {
+        editIndex: action.payload
+      })
   }
 };
 
