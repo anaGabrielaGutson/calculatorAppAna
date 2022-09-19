@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
+import { arrayOf, shape, string, number } from 'prop-types';
 import { connect } from 'react-redux';
+import { isEmpty } from '@widergy/web-utils/lib/array';
 import { push } from 'connected-react-router';
 import { UTIconButton, UTLabel } from '@widergy/energy-ui';
-import { arrayOf, shape, string, number } from 'prop-types';
-import { isEmpty } from '@widergy/web-utils/lib/array';
 import i18 from 'i18next';
 
 import { HOME } from 'constants/routes';
@@ -12,7 +12,7 @@ import ExpressionActions from 'redux/expressions/actions';
 import { ReactComponent as TrashIcon } from '../../assets/trash_icon.svg';
 import { ReactComponent as BackPageIcon } from '../../assets/backpage_icon.svg';
 
-import Expression from './Components/Expression';
+import Expression from './components/Expression';
 import styles from './styles.module.scss';
 
 const Record = ({ expressions, dispatch }) => {
@@ -31,7 +31,7 @@ const Record = ({ expressions, dispatch }) => {
 
   return (
     <div>
-      <UTIconButton style={{ borderRadius: '10px' }} onClick={() => dispatch(push(HOME))}>
+      <UTIconButton style={{ borderRadius: '10px', fontSize: '1.3rem' }} onClick={() => dispatch(push(HOME))}>
         <BackPageIcon /> {i18.t('Record:goBack')}
       </UTIconButton>
       <div className={styles.titleBar}>

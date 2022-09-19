@@ -16,24 +16,29 @@ const Home = ({ valuesToMap, sentenceToDisplay, actualDisplay, buttonRenderer })
   const dispatch = useDispatch();
 
   return (
-    <div className={styles.calculatorContainer}>
-      <div className={styles.calculatorDisplayBox}>
-        <div className={styles.calculatorTopBar}>
-          <UTLabel bold>{i18.t('Calculator:name')}</UTLabel>
-          <div className={styles.calculatorSolarPower} />
+    <div className={styles.container}>
+      <div className={styles.calculatorContainer}>
+        <div className={styles.calculatorDisplayBox}>
+          <div className={styles.calculatorTopBar}>
+            <UTLabel bold>{i18.t('Calculator:name')}</UTLabel>
+            <div className={styles.calculatorSolarPower} />
+          </div>
+          <div className={styles.calculatorResultBox}>
+            <UTTooltip content={<span>{i18.t('Calculator:recordButton')}</span>} tippyProps={TOOLTIP_CONFIG}>
+              <span className={styles.recordButtonContainer}>
+                <UTIconButton
+                  className={styles.calculatorRecordButton}
+                  onClick={() => dispatch(push(RECORD))}
+                >
+                  <Icon />
+                </UTIconButton>
+              </span>
+            </UTTooltip>
+            <div className={styles.calculatorResultDisplay}>{sentenceToDisplay(actualDisplay)}</div>
+          </div>
         </div>
-        <div className={styles.calculatorResultBox}>
-          <UTTooltip content={<span>{i18.t('Calculator:recordButton')}</span>} tippyProps={TOOLTIP_CONFIG}>
-            <span className={styles.recordButtonContainer}>
-              <UTIconButton className={styles.calculatorRecordButton} onClick={() => dispatch(push(RECORD))}>
-                <Icon />
-              </UTIconButton>
-            </span>
-          </UTTooltip>
-          <div className={styles.calculatorResultDisplay}>{sentenceToDisplay(actualDisplay)}</div>
-        </div>
+        <div className={styles.calculatorButtons}>{valuesToMap.map(buttonRenderer)}</div>
       </div>
-      <div className={styles.calculatorButtons}>{valuesToMap.map(buttonRenderer)}</div>
     </div>
   );
 };

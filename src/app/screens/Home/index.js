@@ -29,13 +29,11 @@ import {
 
 const HomeContainer = ({ editIndex, expressions, dispatch }) => {
   const [actualDisplayRef, setDisplay] = useMutableState(STATE.INICIAL);
-  const [operationStateRef, setOperationState] = useMutableState(STATE.SIN_REALIZAR);
 
   useEffect(() => {
     if (editIndex !== null) {
       const [expressionToEdit] = expressions.filter(({ id }) => id === editIndex);
       setDisplay(expressionToEdit.value.split(OPERATORS.EQUAL)[0].trim());
-      setOperationState(STATE.REALIZANDO);
     }
   }, [editIndex]);
 
@@ -73,14 +71,11 @@ const HomeContainer = ({ editIndex, expressions, dispatch }) => {
       [lastElement, secondToLastElement] = lastTwoElementsDisplayed();
     }
 
-    if (operationStateRef.current === STATE.SIN_REALIZAR && isNumber(newElement)) setDisplay(newElement);
-    else if (actualDisplayRef.current === STATE.INICIAL) executeActionWhenInitialState(newElement);
+    if (actualDisplayRef.current === STATE.INICIAL) executeActionWhenInitialState(newElement);
     else if (isOperator(newElement))
       executeActionWhenElementIsOperator(newElement, lastElement, secondToLastElement);
     else if (isValidDot(newElement, lastElement, actualDisplayRef.current) || isNumber(newElement))
       addCharacter(newElement);
-
-    setOperationState(STATE.REALIZANDO);
   };
 
   const saveExpression = (expression, result) => {
@@ -101,11 +96,9 @@ const HomeContainer = ({ editIndex, expressions, dispatch }) => {
     setDisplay(result);
 
     saveExpression(adjustExpression(expression), result);
-    setOperationState(STATE.SIN_REALIZAR);
   };
 
   const restartDisplay = () => {
-    setOperationState(STATE.SIN_REALIZAR);
     setDisplay(STATE.INICIAL);
   };
 

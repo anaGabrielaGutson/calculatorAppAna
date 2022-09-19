@@ -4,21 +4,18 @@ import { completeReducer, createReducer } from 'redux-recompose';
 import { actions } from './actions';
 
 export const defaultState = {
-  editIndex: null,
-  expressions: []
+  inputValues: {},
+  lastName: null,
+  name: null
 };
 
 const reducerDescription = {
-  primaryActions: [
-    actions.ADD_EXPRESSION,
-    actions.DELETE_EXPRESSION,
-    actions.EDIT_EXPRESSION,
-    actions.FETCH_EXPRESSIONS
-  ],
+  primaryActions: [actions.SUBMIT_FORM],
   override: {
-    [actions.REWRITE_EXPRESSION]: (state, action) =>
+    [actions.SAVE_VALUES]: (state, action) =>
       Immutable.merge(state, {
-        editIndex: action.payload
+        name: action.payload.name,
+        lastName: action.payload.lastName
       })
   }
 };
